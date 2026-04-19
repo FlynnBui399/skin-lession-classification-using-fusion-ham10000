@@ -1,0 +1,92 @@
+{
+  "model_comparison": [
+    {
+      "Model": "XGBoost",
+      "Accuracy": 0.8145917001338688,
+      "Macro F1": 0.5782094772182116,
+      "Weighted F1": 0.8146535676629788,
+      "ROC-AUC": 0.9479608999129585
+    },
+    {
+      "Model": "LightGBM",
+      "Accuracy": 0.8165997322623829,
+      "Macro F1": 0.5748744555420838,
+      "Weighted F1": 0.8132952062169602,
+      "ROC-AUC": 0.9418129190418953
+    },
+    {
+      "Model": "Random Forest",
+      "Accuracy": 0.7884872824631861,
+      "Macro F1": 0.5418753784899479,
+      "Weighted F1": 0.8016401631218935,
+      "ROC-AUC": 0.9392651428473126
+    },
+    {
+      "Model": "SVM (RBF)",
+      "Accuracy": 0.785809906291834,
+      "Macro F1": 0.5310013918991936,
+      "Weighted F1": 0.7877806951547577,
+      "ROC-AUC": 0.9174766437639889
+    },
+    {
+      "Model": "Logistic Regression",
+      "Accuracy": 0.7884872824631861,
+      "Macro F1": 0.520052916493162,
+      "Weighted F1": 0.8023412876271174,
+      "ROC-AUC": 0.9366313842352715
+    },
+    {
+      "Model": "K-Nearest Neighbors",
+      "Accuracy": 0.6961178045515395,
+      "Macro F1": 0.3886235900324742,
+      "Weighted F1": 0.7310918128222151,
+      "ROC-AUC": 0.743989781582508
+    }
+  ],
+  "feature_set_comparison": {
+    "Metadata Only": {
+      "Accuracy": 0.713520749665328,
+      "Macro F1": 0.4008464976776257,
+      "Weighted F1": 0.7366632686805267,
+      "ROC-AUC": 0.8750934790589854,
+      "n_features": 23
+    },
+    "Image Only": {
+      "Accuracy": 0.7550200803212851,
+      "Macro F1": 0.4279362593009199,
+      "Weighted F1": 0.7580517152697783,
+      "ROC-AUC": 0.9011964244062137,
+      "n_features": 27
+    },
+    "Combined (Meta+Image)": {
+      "Accuracy": 0.8105756358768407,
+      "Macro F1": 0.5632981460205639,
+      "Weighted F1": 0.8056515095349023,
+      "ROC-AUC": 0.9455071017389011,
+      "n_features": 50
+    }
+  },
+  "best_model": {
+    "name": "Tuned LightGBM",
+    "accuracy": 0.8065595716198126,
+    "macro_f1": 0.5621270388804467,
+    "weighted_f1": 0.8136807121169776,
+    "roc_auc": 0.9456373483335839,
+    "best_params": {
+      "subsample": "0.7",
+      "reg_lambda": "1.0",
+      "reg_alpha": "0",
+      "num_leaves": "50",
+      "n_estimators": "300",
+      "min_child_samples": "30",
+      "max_depth": "5",
+      "learning_rate": "0.03",
+      "colsample_bytree": "0.7"
+    }
+  },
+  "melanoma_metrics": {
+    "recall": 0.5447154471544715,
+    "precision": 0.4652777777777778,
+    "f1": 0.50187265917603
+  }
+}

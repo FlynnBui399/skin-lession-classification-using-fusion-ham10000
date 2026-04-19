@@ -1,0 +1,36 @@
+{
+  "melanoma_improvement": [
+    {
+      "Method": "Baseline (7-class, argmax)",
+      "Mel Recall": 0.5447154471544715,
+      "Mel Precision": 0.4652777777777778,
+      "Macro F1": 0.5621270388804467,
+      "Accuracy": 0.8065595716198126
+    },
+    {
+      "Method": "7-class threshold = 0.05",
+      "Mel Recall": 0.926829268292683,
+      "Mel Precision": 0.26450116009280744,
+      "Macro F1": 0.528697604039957,
+      "Accuracy": 0.7228915662650602
+    },
+    {
+      "Method": "Binary classifier (thr = 0.50)",
+      "Mel Recall": 0.7886178861788617,
+      "Mel Precision": 0.388,
+      "Macro F1": NaN,
+      "Accuracy": NaN
+    },
+    {
+      "Method": "Two-tier pipeline (gate thr = 0.56)",
+      "Mel Recall": 0.7560975609756098,
+      "Mel Precision": 0.39574468085106385,
+      "Macro F1": 0.5498961915219808,
+      "Accuracy": 0.7971887550200804
+    }
+  ],
+  "roc_auc_mel_7class": 0.9244987635871982,
+  "roc_auc_mel_binary": 0.9324924540273849,
+  "avg_precision_mel_7class": 0.5128565998182903,
+  "avg_precision_mel_binary": 0.49632043479689586
+}

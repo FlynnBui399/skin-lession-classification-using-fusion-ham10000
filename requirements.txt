@@ -1,0 +1,30 @@
+# Core data-science stack
+numpy>=1.26
+pandas>=2.1
+scipy>=1.11
+statsmodels>=0.14
+
+# Visualization
+matplotlib>=3.8
+seaborn>=0.13
+
+# Machine learning
+scikit-learn>=1.4
+xgboost>=2.0
+lightgbm>=4.2
+imbalanced-learn>=0.12
+scikit-posthocs>=0.9
+
+# Image processing & handcrafted feature extraction
+opencv-python>=4.9
+scikit-image>=0.22
+Pillow>=10.2
+
+# Utilities
+tqdm>=4.66
+jupyter>=1.0
+nbconvert>=7.14
+ipykernel>=6.29
+
+# Optional: GPU detection only (not required to reproduce results on CPU)
+# torch>=2.2
