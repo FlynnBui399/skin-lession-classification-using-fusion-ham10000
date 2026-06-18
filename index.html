@@ -1,3 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Skin Lesion Classification on HAM10000</title>
+  <meta
+    name="description"
+    content="HAM10000 skin lesion classification project combining patient metadata, handcrafted image features, statistical analysis, and machine learning."
+  />
+  <style>
+    :root {
+      --ink: #18212f;
+      --muted: #5b6678;
+      --line: #d9e0ea;
+      --paper: #f7f9fc;
+      --panel: #ffffff;
+      --teal: #117a7a;
+      --rose: #b54b5d;
+      --amber: #b87816;
+      --blue: #285f9f;
+      --shadow: 0 18px 40px rgba(24, 33, 47, 0.10);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--paper);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid rgba(217, 224, 234, 0.86);
+      background: rgba(247, 249, 252, 0.92);
+      backdrop-filter: blur(16px);
+    }
+
+    .nav {
+      width: min(1160px, calc(100% - 32px));
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 64px;
+      gap: 20px;
+    }
+
+    .brand {
+      font-weight: 760;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+    }
+
+    .nav-links a:hover {
+      color: var(--teal);
+    }
+
+    .hero {
+      min-height: 86vh;
+      display: grid;
+      align-items: center;
+      padding: 72px 0 44px;
+      color: #ffffff;
+      background:
+        linear-gradient(90deg, rgba(17, 31, 46, 0.90), rgba(17, 31, 46, 0.70) 44%, rgba(17, 31, 46, 0.30)),
+        url("results/sample_images.png") center / cover no-repeat;
+    }
+
+    .hero-inner,
+    .section-inner {
+      width: min(1160px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .hero-content {
+      max-width: 760px;
+    }
+
+    .eyebrow {
+      margin: 0 0 14px;
+      color: #b9e5e0;
+      font-size: 0.82rem;
+      font-weight: 760;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.45rem, 5.7vw, 5.2rem);
+      line-height: 1.02;
+      letter-spacing: 0;
+    }
+
+    .hero-copy {
+      max-width: 680px;
+      margin: 22px 0 0;
+      color: rgba(255, 255, 255, 0.88);
+      font-size: 1.1rem;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 18px;
+      border: 1px solid rgba(255, 255, 255, 0.42);
+      border-radius: 6px;
+      color: #ffffff;
+      font-weight: 720;
+      text-decoration: none;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .button.primary {
+      border-color: #ffffff;
+      color: #12202f;
+      background: #ffffff;
+    }
+
+    .hero-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      margin-top: 54px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.20);
+    }
+
+    .hero-stat {
+      min-height: 96px;
+      padding: 18px;
+      background: rgba(12, 26, 40, 0.62);
+    }
+
+    .hero-stat strong {
+      display: block;
+      font-size: 1.7rem;
+      line-height: 1.1;
+    }
+
+    .hero-stat span {
+      display: block;
+      margin-top: 6px;
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 0.9rem;
+    }
+
+    section {
+      padding: 72px 0;
+    }
+
+    section.alt {
+      background: #ffffff;
+    }
+
+    .section-heading {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(280px, 1.1fr);
+      gap: 36px;
+      align-items: end;
+      margin-bottom: 34px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(1.9rem, 3.2vw, 3rem);
+      line-height: 1.12;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.02rem;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .metric {
+      min-height: 146px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .metric small {
+      display: block;
+      color: var(--muted);
+      font-weight: 720;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .metric strong {
+      display: block;
+      margin-top: 12px;
+      color: var(--teal);
+      font-size: 2.25rem;
+      line-height: 1;
+    }
+
+    .metric span {
+      display: block;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .visual-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .figure-card,
+    .deliverable {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .figure-card img {
+      width: 100%;
+      height: 320px;
+      object-fit: contain;
+      padding: 18px;
+      background: #ffffff;
+    }
+
+    .figure-card figcaption {
+      padding: 16px 18px 18px;
+      border-top: 1px solid var(--line);
+    }
+
+    .figure-card h3,
+    .deliverable h3 {
+      margin: 0;
+      font-size: 1.08rem;
+      line-height: 1.3;
+    }
+
+    .figure-card p,
+    .deliverable p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .pipeline {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+      counter-reset: step;
+    }
+
+    .step {
+      min-height: 150px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      position: relative;
+    }
+
+    .step::before {
+      counter-increment: step;
+      content: counter(step);
+      display: inline-grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      margin-bottom: 18px;
+      border-radius: 50%;
+      color: #ffffff;
+      font-weight: 780;
+      background: var(--blue);
+    }
+
+    .step h3 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .step p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .deliverables {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .deliverable {
+      padding: 22px;
+    }
+
+    .deliverable a {
+      display: inline-flex;
+      margin-top: 18px;
+      color: var(--teal);
+      font-weight: 760;
+      text-decoration: none;
+    }
+
+    .repo-band {
+      padding: 36px 0;
+      color: #ffffff;
+      background: #172235;
+    }
+
+    .repo-band .section-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .repo-band p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.74);
+    }
+
+    .repo-band a {
+      flex: 0 0 auto;
+      border-color: rgba(255, 255, 255, 0.62);
+    }
+
+    .site-footer {
+      padding: 34px 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+      background: #ffffff;
+      border-top: 1px solid var(--line);
+    }
+
+    .site-footer .section-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .nav {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 14px 0;
+      }
+
+      .nav-links {
+        width: 100%;
+        overflow-x: auto;
+        padding-bottom: 4px;
+      }
+
+      .hero {
+        min-height: auto;
+        padding-top: 56px;
+      }
+
+      .hero-strip,
+      .metric-grid,
+      .visual-grid,
+      .pipeline,
+      .deliverables {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .section-heading {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .hero {
+        background:
+          linear-gradient(180deg, rgba(17, 31, 46, 0.92), rgba(17, 31, 46, 0.70)),
+          url("results/sample_images.png") center / cover no-repeat;
+      }
+
+      .hero-strip,
+      .metric-grid,
+      .visual-grid,
+      .pipeline,
+      .deliverables {
+        grid-template-columns: 1fr;
+      }
+
+      .figure-card img {
+        height: 250px;
+      }
+
+      .repo-band .section-inner,
+      .site-footer .section-inner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav" aria-label="Primary navigation">
+      <div class="brand">HAM10000 Skin Lesion Classification</div>
+      <div class="nav-links">
+        <a href="#results">Results</a>
+        <a href="#analysis">Analysis</a>
+        <a href="#pipeline">Pipeline</a>
+        <a href="#deliverables">Deliverables</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="hero-content">
+          <p class="eyebrow">Introduction to Data Science - Team 07</p>
+          <h1>Skin Lesion Classification on HAM10000</h1>
+          <p class="hero-copy">
+            A data science study combining clinical metadata, handcrafted dermoscopic image features,
+            statistical testing, and machine learning to classify seven skin lesion categories and
+            improve melanoma-focused screening behavior.
+          </p>
+          <div class="actions">
+            <a class="button primary" href="Report/Report.html">Open report</a>
+            <a class="button" href="https://github.com/FlynnBui399/skin-lession-classification-using-fusion-ham10000">View repository</a>
+          </div>
+        </div>
+
+        <div class="hero-strip" aria-label="Project summary">
+          <div class="hero-stat">
+            <strong>10,015</strong>
+            <span>HAM10000 dermatoscopic images</span>
+          </div>
+          <div class="hero-stat">
+            <strong>7</strong>
+            <span>diagnostic lesion classes</span>
+          </div>
+          <div class="hero-stat">
+            <strong>50</strong>
+            <span>combined metadata and image features</span>
+          </div>
+          <div class="hero-stat">
+            <strong>0.946</strong>
             <span>best tuned OvR ROC-AUC</span>
           </div>
         </div>
