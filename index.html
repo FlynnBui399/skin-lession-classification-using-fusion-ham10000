@@ -1,200 +1,176 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Skin Lesion Classification on HAM10000</title>
-  <meta
-    name="description"
-    content="HAM10000 skin lesion classification project combining patient metadata, handcrafted image features, statistical analysis, and machine learning."
-  />
-  <style>
-    :root {
-      --ink: #18212f;
-      --muted: #5b6678;
-      --line: #d9e0ea;
-      --paper: #f7f9fc;
-      --panel: #ffffff;
-      --teal: #117a7a;
-      --rose: #b54b5d;
-      --amber: #b87816;
-      --blue: #285f9f;
-      --shadow: 0 18px 40px rgba(24, 33, 47, 0.10);
-    }
+            <span>best tuned OvR ROC-AUC</span>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    * {
-      box-sizing: border-box;
-    }
+    <section id="results" class="alt">
+      <div class="section-inner">
+        <div class="section-heading">
+          <h2>Headline Results</h2>
+          <p class="lead">
+            Combined metadata and handcrafted image descriptors produced the strongest overall feature
+            set. The final tuned LightGBM model keeps high discrimination while reporting macro metrics
+            for the imbalanced class distribution.
+          </p>
+        </div>
 
-    html {
-      scroll-behavior: smooth;
-    }
+        <div class="metric-grid">
+          <div class="metric">
+            <small>Tuned LightGBM</small>
+            <strong>0.807</strong>
+            <span>accuracy on the held-out evaluation split</span>
+          </div>
+          <div class="metric">
+            <small>Tuned LightGBM</small>
+            <strong>0.562</strong>
+            <span>macro-F1 across all seven lesion classes</span>
+          </div>
+          <div class="metric">
+            <small>Tuned LightGBM</small>
+            <strong>0.814</strong>
+            <span>weighted-F1 under class imbalance</span>
+          </div>
+          <div class="metric">
+            <small>Tuned LightGBM</small>
+            <strong>0.946</strong>
+            <span>one-vs-rest ROC-AUC</span>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    body {
-      margin: 0;
-      color: var(--ink);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: var(--paper);
-      line-height: 1.6;
-    }
+    <section id="analysis">
+      <div class="section-inner">
+        <div class="section-heading">
+          <h2>Model Evidence</h2>
+          <p class="lead">
+            The generated figures summarize feature-set value, model ranking, error patterns, and the
+            melanoma-specific operating point tradeoffs.
+          </p>
+        </div>
 
-    a {
-      color: inherit;
-    }
+        <div class="visual-grid">
+          <figure class="figure-card">
+            <img src="results/feature_set_comparison.png" alt="Feature set comparison chart" />
+            <figcaption>
+              <h3>Feature fusion improves performance</h3>
+              <p>Metadata plus image features outperform either source alone on accuracy, macro-F1, and ROC-AUC.</p>
+            </figcaption>
+          </figure>
 
-    img {
-      display: block;
-      max-width: 100%;
-    }
+          <figure class="figure-card">
+            <img src="results/model_comparison.png" alt="Model comparison chart" />
+            <figcaption>
+              <h3>Tree-based models lead the benchmark</h3>
+              <p>XGBoost, LightGBM, and Random Forest provide the strongest tabular baselines.</p>
+            </figcaption>
+          </figure>
 
-    .site-header {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      border-bottom: 1px solid rgba(217, 224, 234, 0.86);
-      background: rgba(247, 249, 252, 0.92);
-      backdrop-filter: blur(16px);
-    }
+          <figure class="figure-card">
+            <img src="results/final_confusion_matrix.png" alt="Final confusion matrix" />
+            <figcaption>
+              <h3>Class imbalance shapes errors</h3>
+              <p>The confusion matrix highlights where minority classes remain difficult under the seven-way setup.</p>
+            </figcaption>
+          </figure>
 
-    .nav {
-      width: min(1160px, calc(100% - 32px));
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      min-height: 64px;
-      gap: 20px;
-    }
+          <figure class="figure-card">
+            <img src="results/mel_roc_pr.png" alt="Melanoma ROC and precision recall curves" />
+            <figcaption>
+              <h3>Melanoma-focused evaluation</h3>
+              <p>The binary melanoma gate raises recall at the cost of precision, making the tradeoff explicit.</p>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
 
-    .brand {
-      font-weight: 760;
-      letter-spacing: 0;
-      white-space: nowrap;
-    }
+    <section id="pipeline" class="alt">
+      <div class="section-inner">
+        <div class="section-heading">
+          <h2>Project Pipeline</h2>
+          <p class="lead">
+            The repository is organized as reusable Python modules under <code>src/</code> and thin command-line
+            scripts under <code>scripts/</code>, with notebooks and exported HTML reports as deliverables.
+          </p>
+        </div>
 
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      color: var(--muted);
-      font-size: 0.94rem;
-    }
+        <div class="pipeline">
+          <div class="step">
+            <h3>Load HAM10000</h3>
+            <p>Read metadata, index dermoscopic images, and audit dataset availability.</p>
+          </div>
+          <div class="step">
+            <h3>Explore metadata</h3>
+            <p>Analyze class balance, age, sex, localization, and diagnostic type distributions.</p>
+          </div>
+          <div class="step">
+            <h3>Extract features</h3>
+            <p>Build handcrafted descriptors for color, texture, shape, and lesion appearance.</p>
+          </div>
+          <div class="step">
+            <h3>Train models</h3>
+            <p>Compare metadata-only, image-only, and fused feature sets across baseline classifiers.</p>
+          </div>
+          <div class="step">
+            <h3>Tune melanoma recall</h3>
+            <p>Evaluate threshold sweeps and a two-tier pipeline for melanoma-sensitive screening.</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    .nav-links a {
-      text-decoration: none;
-    }
+    <section id="deliverables">
+      <div class="section-inner">
+        <div class="section-heading">
+          <h2>Deliverables</h2>
+          <p class="lead">
+            Course artifacts are included in the repository and can be opened directly from GitHub Pages.
+          </p>
+        </div>
 
-    .nav-links a:hover {
-      color: var(--teal);
-    }
+        <div class="deliverables">
+          <article class="deliverable">
+            <h3>Proposal</h3>
+            <p>Initial project scope, motivation, research questions, and planned methodology.</p>
+            <a href="Proposal/Proposal.html">Open proposal</a>
+          </article>
+          <article class="deliverable">
+            <h3>Milestone</h3>
+            <p>Intermediate progress report with early analysis outputs and pipeline status.</p>
+            <a href="Milestone/Milestone.html">Open milestone</a>
+          </article>
+          <article class="deliverable">
+            <h3>Final Report</h3>
+            <p>Complete experiment narrative, model evaluation, and melanoma-focused analysis.</p>
+            <a href="Report/Report.html">Open report</a>
+          </article>
+          <article class="deliverable">
+            <h3>Presentation</h3>
+            <p>Slide deck for the final course presentation.</p>
+            <a href="Presentation/Presentation.pptx">Download slides</a>
+          </article>
+        </div>
+      </div>
+    </section>
 
-    .hero {
-      min-height: 86vh;
-      display: grid;
-      align-items: center;
-      padding: 72px 0 44px;
-      color: #ffffff;
-      background:
-        linear-gradient(90deg, rgba(17, 31, 46, 0.90), rgba(17, 31, 46, 0.70) 44%, rgba(17, 31, 46, 0.30)),
-        url("results/sample_images.png") center / cover no-repeat;
-    }
+    <aside class="repo-band">
+      <div class="section-inner">
+        <div>
+          <h2>Reproduce the Experiments</h2>
+          <p>Install the Python dependencies, download HAM10000 following <code>data/README.md</code>, then run the scripts in order or open the notebooks.</p>
+        </div>
+        <a class="button" href="README.md">Read setup notes</a>
+      </div>
+    </aside>
+  </main>
 
-    .hero-inner,
-    .section-inner {
-      width: min(1160px, calc(100% - 32px));
-      margin: 0 auto;
-    }
-
-    .hero-content {
-      max-width: 760px;
-    }
-
-    .eyebrow {
-      margin: 0 0 14px;
-      color: #b9e5e0;
-      font-size: 0.82rem;
-      font-weight: 760;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(2.45rem, 5.7vw, 5.2rem);
-      line-height: 1.02;
-      letter-spacing: 0;
-    }
-
-    .hero-copy {
-      max-width: 680px;
-      margin: 22px 0 0;
-      color: rgba(255, 255, 255, 0.88);
-      font-size: 1.1rem;
-    }
-
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 30px;
-    }
-
-    .button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 44px;
-      padding: 0 18px;
-      border: 1px solid rgba(255, 255, 255, 0.42);
-      border-radius: 6px;
-      color: #ffffff;
-      font-weight: 720;
-      text-decoration: none;
-      background: rgba(255, 255, 255, 0.12);
-    }
-
-    .button.primary {
-      border-color: #ffffff;
-      color: #12202f;
-      background: #ffffff;
-    }
-
-    .hero-strip {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 1px;
-      margin-top: 54px;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.24);
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.20);
-    }
-
-    .hero-stat {
-      min-height: 96px;
-      padding: 18px;
-      background: rgba(12, 26, 40, 0.62);
-    }
-
-    .hero-stat strong {
-      display: block;
-      font-size: 1.7rem;
-      line-height: 1.1;
-    }
-
-    .hero-stat span {
-      display: block;
-      margin-top: 6px;
-      color: rgba(255, 255, 255, 0.75);
-      font-size: 0.9rem;
-    }
-
-    section {
-      padding: 72px 0;
-    }
-
-    section.alt {
-      background: #ffffff;
-    }
-
-    .section-heading {
+  <footer class="site-footer">
+    <div class="section-inner">
+      <span>Team 07 - HCMUTE Faculty of IT</span>
+      <span>For research and education only; not a medical diagnostic tool.</span>
+    </div>
+  </footer>
+</body>
+</html>
