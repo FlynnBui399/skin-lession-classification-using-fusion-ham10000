@@ -1,11 +1,5 @@
 # Skin-Lesion Classification on HAM10000 — Combining Metadata Statistics and Machine Learning
 
-**Course:** Introduction to Data Science — HCMUTE, Faculty of IT
-**Instructor:** Quách Đình Hoàng
-**Team 07:**
-- Nguyễn Nhật Phát
-- Bùi Trần Tấn Phát
-
 ## Abstract
 
 This project analyses the **HAM10000** dermatoscopic dataset (10,015 images, 7 diagnostic classes) to support early melanoma detection. We combine **statistical hypothesis testing** on patient metadata with **handcrafted image features** and train a family of tabular machine-learning models. The best tuned LightGBM achieves **Accuracy 0.807**, **Macro-F1 0.562**, and **OvR ROC-AUC 0.946**; a dedicated two-tier pipeline further improves melanoma recall from 0.54 to a clinically more useful operating point. The dataset is severely imbalanced (66.9% melanocytic nevi), so macro-averaged and per-class metrics drive all comparisons.
